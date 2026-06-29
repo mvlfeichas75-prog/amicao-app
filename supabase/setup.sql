@@ -50,12 +50,22 @@ ALTER TABLE public.animais ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "animais: leitura pública"   ON public.animais;
 DROP POLICY IF EXISTS "animais: insert público"     ON public.animais;
+DROP POLICY IF EXISTS "animais: delete público"     ON public.animais;
+DROP POLICY IF EXISTS "animais: update público"     ON public.animais;
 
 CREATE POLICY "animais: leitura pública"
   ON public.animais FOR SELECT USING (true);
 
 CREATE POLICY "animais: insert público"
   ON public.animais FOR INSERT WITH CHECK (true);
+
+-- Permite remoção e atualização de fotos sem autenticação (MVP)
+-- Restrinja a auth.uid() quando implementar login
+CREATE POLICY "animais: delete público"
+  ON public.animais FOR DELETE USING (true);
+
+CREATE POLICY "animais: update público"
+  ON public.animais FOR UPDATE USING (true) WITH CHECK (true);
 
 -- -------------------------------------------------------------
 -- 2. Novas colunas — execute se a tabela animais já existia

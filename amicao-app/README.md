@@ -91,6 +91,16 @@ Bucket `animais` (criado pelo `setup.sql`):
 - **Formatos**: JPG, PNG, WEBP, GIF
 - **Path**: `{timestamp}-{random}.{ext}`
 - `foto_url` armazena um array JSON com até 5 URLs por animal
+- Fotos individuais podem ser removidas pelo usuário diretamente na página de detalhes (deleta do Storage e atualiza o array no banco)
+
+### Políticas RLS requeridas
+
+| Tabela / Bucket | SELECT | INSERT | UPDATE | DELETE |
+|---|---|---|---|---|
+| `animais` (tabela) | ✅ | ✅ | ✅ | ✅ |
+| `animais` (storage) | ✅ | ✅ | — | ✅ |
+
+Todas as políticas estão no `setup.sql` com `USING (true)` (MVP sem auth). Restrinja para `auth.uid()` ao implementar login.
 
 ## Rodando localmente
 

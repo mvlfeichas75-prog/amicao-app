@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { parseFotos } from '@/lib/fotos'
 import GaleriaFotos from './GaleriaFotos'
+import BotaoRemover from './BotaoRemover'
 
 const PORTE_LABEL: Record<string, string> = {
   pequeno: 'Pequeno (até 10 kg)',
@@ -46,7 +47,7 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
       </Link>
 
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-        <GaleriaFotos fotos={fotos} nome={animal.nome} adotado={animal.status === 'adotado'} />
+        <GaleriaFotos fotos={fotos} nome={animal.nome} adotado={animal.status === 'adotado'} animalId={id} />
 
         <div className="p-8 space-y-8">
 
@@ -153,6 +154,11 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
               )}
             </div>
           )}
+
+          {/* Remover anúncio */}
+          <div className="pt-2 border-t border-gray-100 flex justify-end">
+            <BotaoRemover animalId={id} />
+          </div>
 
         </div>
       </div>

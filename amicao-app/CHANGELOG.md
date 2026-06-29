@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- `app/animais/[id]/BotaoRemover.tsx` — Client Component que remove o anúncio completo do Supabase com confirmação e redireciona para `/animais`
+- `app/animais/[id]/GaleriaFotos.tsx` — remoção de fotos individuais: deleta do Supabase Storage e atualiza o array `foto_url` no banco; botão `× Remover foto` visível no hover da foto principal e X nas miniaturas
+- `supabase/setup.sql` — políticas RLS de DELETE e UPDATE para a tabela `animais`
 - `app/animais/novo/page.tsx` — novos campos no formulário de cadastro, organizados em seções visuais:
   - **Saúde**: passou por veterinário (checkbox), condição de saúde, medicamento em uso
   - **Comportamento**: alimentação (ração/caseira/misto), convivência com crianças/cães/gatos (sim/não/não testado), comportamento especial
