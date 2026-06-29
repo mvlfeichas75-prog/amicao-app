@@ -74,8 +74,8 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
     setSalvandoStatus(false)
   }
 
-  async function reenviarCodigo(e: React.FormEvent) {
-    e.preventDefault()
+  async function reenviarCodigo(e?: React.FormEvent | React.KeyboardEvent) {
+    e?.preventDefault()
     setReenviando(true)
     setErroReenvio(null)
     try {
@@ -185,27 +185,28 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
                       </p>
                     </div>
                   ) : (
-                    <form onSubmit={reenviarCodigo} className="space-y-2 border-t border-gray-100 pt-4">
+                    <div className="space-y-2 border-t border-gray-100 pt-4">
                       <p className="text-xs text-gray-500">Informe o email usado ao cadastrar o anúncio:</p>
                       <input
                         type="email"
                         value={emailReenvio}
                         onChange={e => { setEmailReenvio(e.target.value); setErroReenvio(null) }}
                         placeholder="voce@email.com"
-                        required
                         className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        onKeyDown={e => { if (e.key === 'Enter' && emailReenvio.trim() && !reenviando) reenviarCodigo(e) }}
                       />
                       {erroReenvio && (
                         <p className="text-sm text-red-500">{erroReenvio}</p>
                       )}
                       <button
-                        type="submit"
+                        type="button"
+                        onClick={reenviarCodigo}
                         disabled={!emailReenvio.trim() || reenviando}
                         className="w-full bg-gray-100 text-gray-700 font-medium py-2.5 rounded-full hover:bg-orange-50 hover:text-orange-600 transition disabled:opacity-60 disabled:cursor-not-allowed text-sm"
                       >
                         {reenviando ? 'Enviando…' : 'Reenviar código'}
                       </button>
-                    </form>
+                    </div>
                   )
                 )}
               </form>

@@ -8,6 +8,7 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [Não publicado]
 
 ### Corrigido
+- `app/animais/[id]/ModalGerenciar.tsx`: substituído `<form>` de reenvio aninhado dentro do `<form>` de verificação de código por `<div>` — HTML inválido que fazia o browser ignorar o submit interno; botão agora usa `onClick` e o campo responde ao Enter via `onKeyDown`
 - `app/api/reenviar-codigo/route.ts`: reescrita com `console.log` em cada etapa (rota atingida, env vars presentes, body recebido, animal encontrado, emails comparados, código salvo, email enviado); `createClient` movido para dentro do handler para evitar falha silenciosa na inicialização do módulo; valida `RESEND_API_KEY` antes de tentar enviar
 - `app/api/reenviar-codigo/route.ts`: agora retorna motivos distintos (`email_nao_encontrado`, `erro_interno`, `erro_email`) em vez de sempre `{ ok: true }`, permitindo ao cliente distinguir sucesso de falha; adiciona `console.log` e `console.error` com JSON completo para debug
 - `app/animais/[id]/ModalGerenciar.tsx`: função `reenviarCodigo` lê o campo `motivo` da resposta — mostra "Email não encontrado para este anúncio" quando o email não confere, "Código enviado para seu email!" no sucesso e mensagem de erro genérica em falhas de rede; erro limpa ao reeditar o campo; `erroReenvio` nunca era exibido antes pois `setReenvioOk(true)` era chamado até no `catch`
