@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { parseFotos } from '@/lib/fotos'
+import GaleriaFotos from './GaleriaFotos'
 
 export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
   const { id } = await props.params
@@ -16,7 +16,6 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
   if (!animal) notFound()
 
   const fotos = parseFotos(animal.foto_url)
-  const fotoMain = fotos[0] ?? null
 
   const porteLabel: Record<string, string> = {
     pequeno: 'Pequeno (até 10 kg)',
@@ -34,53 +33,11 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
       </Link>
 
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-        {/* Foto principal */}
-        <div className="relative h-80 bg-orange-50">
-          {fotoMain ? (
-            <Image
-              src={fotoMain}
-              alt={animal.nome ?? 'Foto do animal'}
-              fill
-              className="object-cover"
-              priority
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-8xl">🐶</div>
-          )}
-
-          {animal.status === 'adotado' && (
-            <div className="absolute top-4 right-4 bg-green-500 text-white text-sm font-bold px-3 py-1 rounded-full">
-              Adotado
-            </div>
-          )}
-
-          {fotos.length > 1 && (
-            <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-              1/{fotos.length}
-            </div>
-          )}
-        </div>
-
-        {/* Strip de miniaturas */}
-        {fotos.length > 1 && (
-          <div className="flex gap-2 px-3 py-3 overflow-x-auto bg-gray-50 border-b border-gray-100">
-            {fotos.map((url, i) => (
-              <div
-                key={url}
-                className={`relative w-20 h-20 shrink-0 rounded-lg overflow-hidden border-2 transition ${
-                  i === 0 ? 'border-orange-400' : 'border-transparent'
-                }`}
-              >
-                <Image
-                  src={url}
-                  alt={`${animal.nome ?? 'Animal'} — foto ${i + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        <GaleriaFotos
+          fotos={fotos}
+          nome={animal.nome}
+          adotado={animal.status === 'adotado'}
+        />
 
         {/* Conteúdo */}
         <div className="p-8">
