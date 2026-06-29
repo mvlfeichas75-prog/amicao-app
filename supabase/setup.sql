@@ -42,6 +42,9 @@ CREATE TABLE IF NOT EXISTS public.animais (
   contato             text,
   resgatador_nome     text,
   resgatador_contato  text,
+  -- Gerenciamento do anúncio
+  email_anunciante    text,
+  codigo_gerenciamento text,
   criado_em   timestamptz NOT NULL DEFAULT now()
 );
 
@@ -86,7 +89,9 @@ ALTER TABLE public.animais
   ADD COLUMN IF NOT EXISTS foi_resgatado       boolean     NOT NULL DEFAULT false,
   ADD COLUMN IF NOT EXISTS tempo_nas_ruas      text,
   ADD COLUMN IF NOT EXISTS resgatador_nome     text,
-  ADD COLUMN IF NOT EXISTS resgatador_contato  text;
+  ADD COLUMN IF NOT EXISTS resgatador_contato  text,
+  ADD COLUMN IF NOT EXISTS email_anunciante    text,
+  ADD COLUMN IF NOT EXISTS codigo_gerenciamento text;
 
 -- -------------------------------------------------------------
 -- 3. Storage — bucket animais

@@ -44,7 +44,10 @@ Crie `amicao-app/.env.local`:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://<seu-projeto>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<sua-chave-anon>
+RESEND_API_KEY=re_<sua-chave-resend>
 ```
+
+A chave do Resend é obtida em [resend.com](https://resend.com) após criar uma conta. O envio de emails usa `onboarding@resend.dev` em desenvolvimento (sem verificação de domínio necessária).
 
 ### 2. Banco de dados e Storage
 
@@ -94,6 +97,9 @@ O script cria:
 | `contato` | text | WhatsApp público para adotante |
 | `resgatador_nome` | text | não exibido publicamente |
 | `resgatador_contato` | text | não exibido publicamente |
+| **Gerenciamento** | | |
+| `email_anunciante` | text | email para receber o código; não exibido publicamente |
+| `codigo_gerenciamento` | text | código de 6 dígitos gerado no cadastro |
 | `criado_em` | timestamptz | default `now()` |
 
 ## Imagens externas

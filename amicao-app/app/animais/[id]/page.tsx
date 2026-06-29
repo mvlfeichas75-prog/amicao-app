@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { parseFotos } from '@/lib/fotos'
 import GaleriaFotos from './GaleriaFotos'
-import BotaoRemover from './BotaoRemover'
+import ModalGerenciar from './ModalGerenciar'
 
 const PORTE_LABEL: Record<string, string> = {
   pequeno: 'Pequeno (até 10 kg)',
@@ -155,9 +155,9 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
             </div>
           )}
 
-          {/* Remover anúncio */}
+          {/* Gerenciar anúncio */}
           <div className="pt-2 border-t border-gray-100 flex justify-end">
-            <BotaoRemover animalId={id} />
+            <ModalGerenciar animalId={id} statusAtual={animal.status} />
           </div>
 
         </div>

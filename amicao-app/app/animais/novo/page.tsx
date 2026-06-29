@@ -55,6 +55,7 @@ export default function NovoAnimalPage() {
   const [estado, setEstado] = useState('SP')
 
   // Contato do resgatador (privado)
+  const [emailAnunciante, setEmailAnunciante] = useState('')
   const [resgatadorNome, setResgatadorNome] = useState('')
   const [resgatadorContato, setResgatadorContato] = useState('')
 
@@ -82,6 +83,11 @@ export default function NovoAnimalPage() {
     e.preventDefault()
     setErro(null)
 
+    if (!emailAnunciante.trim()) {
+      setErro('Informe seu email para receber o código de gerenciamento.')
+      return
+    }
+
     if (!cidade.trim()) {
       setErro('Informe a cidade.')
       return
@@ -90,6 +96,8 @@ export default function NovoAnimalPage() {
     setLoading(true)
 
     try {
+      const codigo = Math.floor(100000 + Math.random() * 900000).toString()
+
       const urls: string[] = []
 
       for (const foto of fotos) {
@@ -135,6 +143,9 @@ export default function NovoAnimalPage() {
         // Contato privado do resgatador
         resgatador_nome: resgatadorNome.trim() || null,
         resgatador_contato: resgatadorContato.trim() || null,
+        // Gerenciamento do anúncio
+        email_anunciante: emailAnunciante.trim(),
+        codigo_gerenciamento: codigo,
       }
 
       console.log('[amicao] payload do insert:', payload)
@@ -150,6 +161,12 @@ export default function NovoAnimalPage() {
         console.error('Supabase insert error:', insertErro)
         throw new Error(insertErro.message)
       }
+
+      fetch('/api/enviar-codigo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailAnunciante.trim(), codigo, nomeAnimal: nome.trim() || 'animal' }),
+      }).catch(err => console.warn('[amicao] falha ao enviar email do código:', err))
 
       router.refresh()
       router.push('/animais')
@@ -345,6 +362,18 @@ export default function NovoAnimalPage() {
           <div className="bg-orange-50 text-orange-700 text-xs rounded-xl px-4 py-3">
             🔒 Estas informações <strong>não serão exibidas publicamente</strong>. Usadas apenas para comunicação interna caso necessário.
           </div>
+
+          <Field label="Seu email *">
+            <input
+              type="email"
+              value={emailAnunciante}
+              onChange={e => setEmailAnunciante(e.target.value)}
+              placeholder="Ex: voce@email.com"
+              required
+              className={inputClass}
+            />
+            <p className="text-xs text-gray-400 mt-1">Você receberá um código de 6 dígitos para gerenciar este anúncio.</p>
+          </Field>
 
           <Field label="Seu nome (opcional)">
             <input type="text" value={resgatadorNome} onChange={e => setResgatadorNome(e.target.value)}

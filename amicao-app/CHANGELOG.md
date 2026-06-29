@@ -4,6 +4,19 @@
 
 ### Added
 
+#### Sistema de código de gerenciamento
+- Campo **email obrigatório** no formulário `/animais/novo` (seção "Contato do resgatador") — anunciante informa seu email para receber o código
+- Ao cadastrar, gera um **código único de 6 dígitos** e salva nas colunas `email_anunciante` e `codigo_gerenciamento` da tabela `animais`
+- API route `POST /api/enviar-codigo` — envia o código por email via **Resend** (HTML responsivo com o código em destaque)
+- API route `POST /api/verificar-codigo` — verifica o código server-side sem expor o valor ao cliente
+- `ModalGerenciar.tsx` — Client Component com modal de gerenciamento: pede o código de 6 dígitos, verifica via API, e se correto exibe opções de **alterar status** (disponível ↔ adotado), **gerenciar fotos** (instrução para usar a galeria) e **remover anúncio** permanentemente
+- Botão "Gerenciar anúncio" na página `/animais/[id]` substitui o botão simples de remover — qualquer ação destrutiva agora requer o código
+- Pacote `resend` adicionado às dependências
+- Variável `RESEND_API_KEY` adicionada ao `.env.local` com placeholder
+- Colunas `email_anunciante` e `codigo_gerenciamento` adicionadas ao `supabase/setup.sql` (criação e migração via `ADD COLUMN IF NOT EXISTS`)
+
+
+
 #### Página de detalhes `/animais/[id]`
 - `BotaoRemover.tsx` — Client Component para remover o anúncio completo com `window.confirm()`, delete no Supabase e redirect para `/animais`
 - `GaleriaFotos.tsx` — galeria interativa com `useState`: clicar em miniatura atualiza a foto principal; remoção de foto individual (deleta do Storage e atualiza `foto_url` no banco); botão hover na foto principal e X nas miniaturas; upload de novas fotos diretamente na galeria — botão `+` aparece na strip quando há vagas ou na área vazia quando não há nenhuma foto; faz upload para o Storage, atualiza `foto_url` no banco e reflete o resultado no estado local sem reload
