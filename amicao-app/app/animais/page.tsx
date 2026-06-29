@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 import { parseFotos } from '@/lib/fotos'
+import { tempoRelativo } from '@/lib/tempo'
 import FiltrosBarra, { type Filtros, toUrl } from './FiltrosBarra'
 
 const POR_PAGINA = 12
@@ -26,6 +27,7 @@ type Animal = {
   sexo: string
   castrado: boolean
   foto_url: string | null
+  criado_em: string
 }
 
 export default async function AnimaisPage(props: { searchParams: Promise<SearchParams> }) {
@@ -47,7 +49,7 @@ export default async function AnimaisPage(props: { searchParams: Promise<SearchP
 
   let query = supabase
     .from('animais')
-    .select('id, nome, cidade, estado, porte, sexo, castrado, foto_url', { count: 'exact' })
+    .select('id, nome, cidade, estado, porte, sexo, castrado, foto_url, criado_em', { count: 'exact' })
     .eq('status', 'disponivel')
     .order('criado_em', { ascending: false })
 
@@ -151,7 +153,7 @@ export default async function AnimaisPage(props: { searchParams: Promise<SearchP
                       <p className="text-sm text-gray-500 mb-3">
                         {animal.cidade}, {animal.estado}
                       </p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 mb-3">
                         <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full capitalize">
                           {animal.porte}
                         </span>
@@ -164,6 +166,9 @@ export default async function AnimaisPage(props: { searchParams: Promise<SearchP
                           </span>
                         )}
                       </div>
+                      <p className="text-xs text-gray-400">
+                        Publicado {tempoRelativo(animal.criado_em)}
+                      </p>
                     </div>
                   </div>
                 </Link>

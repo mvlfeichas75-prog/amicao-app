@@ -168,9 +168,13 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
 
                 {mostrarReenvio && (
                   reenvioOk ? (
-                    <p className="text-sm text-green-600 bg-green-50 rounded-xl px-4 py-3 text-center">
-                      Se o email for o cadastrado, o código será reenviado em breve.
-                    </p>
+                    <div className="border border-green-200 bg-green-50 rounded-xl px-4 py-4 text-center space-y-1">
+                      <p className="text-green-700 font-semibold text-sm">Email enviado!</p>
+                      <p className="text-green-600 text-xs">
+                        Se o email informado estiver cadastrado, você receberá um novo código em instantes.
+                        Verifique também a caixa de spam.
+                      </p>
+                    </div>
                   ) : (
                     <form onSubmit={reenviarCodigo} className="space-y-2 border-t border-gray-100 pt-4">
                       <p className="text-xs text-gray-500">Informe o email usado ao cadastrar o anúncio:</p>

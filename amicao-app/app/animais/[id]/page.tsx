@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import { parseFotos } from '@/lib/fotos'
+import { tempoRelativo } from '@/lib/tempo'
 import GaleriaFotos from './GaleriaFotos'
 import ModalGerenciar from './ModalGerenciar'
 import ModalInteresse from './ModalInteresse'
@@ -54,7 +55,14 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
 
           {/* Cabeçalho: nome + badges */}
           <div className="flex items-start justify-between gap-4">
-            <h1 className="text-3xl font-bold text-gray-800">{nomeExibido}</h1>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">{nomeExibido}</h1>
+              {animal.criado_em && (
+                <p className="text-xs text-gray-400 mt-1">
+                  Publicado {tempoRelativo(animal.criado_em)}
+                </p>
+              )}
+            </div>
             <div className="flex flex-wrap gap-2 shrink-0">
               <Badge color="orange">{animal.porte}</Badge>
               <Badge color="orange">{animal.sexo === 'desconhecido' ? 'Sexo desconhecido' : animal.sexo}</Badge>

@@ -8,6 +8,16 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [Não publicado]
 
 ### Adicionado
+- `lib/tempo.ts`: utilitário `tempoRelativo(dataStr)` que retorna strings como "há 2 dias", "há 3 horas"
+- Exibição de tempo relativo ("Publicado há X dias") nos cards da listagem `/animais` e no cabeçalho da página `/animais/[id]`
+
+### Corrigido
+- `app/api/reenviar-codigo/route.ts`: agora gera um **novo** código de 6 dígitos, salva no banco (`animais.codigo_gerenciamento`) e envia o novo código via Resend com `await` (antes apenas reenviava o código existente com `.catch` silencioso)
+- `app/animais/[id]/ModalGerenciar.tsx`: mensagem de confirmação de reenvio mais visível — título "Email enviado!" em verde com instrução para verificar spam
+
+---
+
+### Adicionado (anterior)
 - Painel admin em `/admin` com autenticação por senha (`ADMIN_PASSWORD`), sessão em localStorage e 4 seções:
   - **Dashboard**: cards com métricas (total animais, disponíveis, adotados, usuários, interesses)
   - **Gestão de animais**: tabela com foto miniatura, localização, status inline editável e remoção
