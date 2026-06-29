@@ -3,6 +3,16 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
+function parseFotos(foto_url: string | null): string[] {
+  if (!foto_url) return []
+  try {
+    const parsed = JSON.parse(foto_url)
+    return Array.isArray(parsed) ? parsed : [foto_url]
+  } catch {
+    return [foto_url] // compatibilidade com registros antigos (URL simples)
+  }
+}
+
 export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
   const { id } = await props.params
 
@@ -13,6 +23,9 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
     .single()
 
   if (!animal) notFound()
+
+  const fotos = parseFotos(animal.foto_url)
+  const fotoMain = fotos[0] ?? null
 
   const porteLabel: Record<string, string> = {
     pequeno: 'Pequeno (até 10 kg)',
@@ -30,29 +43,58 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
       </Link>
 
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-        {/* Foto */}
+        {/* Foto principal */}
         <div className="relative h-80 bg-orange-50">
-          {animal.foto_url ? (
+          {fotoMain ? (
             <Image
-              src={animal.foto_url}
-              alt={animal.nome}
+              src={fotoMain}
+              alt={animal.nome ?? 'Foto do animal'}
               fill
               className="object-cover"
+              priority
             />
           ) : (
             <div className="flex items-center justify-center h-full text-8xl">🐶</div>
           )}
+
           {animal.status === 'adotado' && (
             <div className="absolute top-4 right-4 bg-green-500 text-white text-sm font-bold px-3 py-1 rounded-full">
               Adotado
             </div>
           )}
+
+          {fotos.length > 1 && (
+            <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+              1/{fotos.length}
+            </div>
+          )}
         </div>
+
+        {/* Strip de miniaturas */}
+        {fotos.length > 1 && (
+          <div className="flex gap-2 px-3 py-3 overflow-x-auto bg-gray-50 border-b border-gray-100">
+            {fotos.map((url, i) => (
+              <div
+                key={url}
+                className={`relative w-20 h-20 shrink-0 rounded-lg overflow-hidden border-2 transition ${
+                  i === 0 ? 'border-orange-400' : 'border-transparent'
+                }`}
+              >
+                <Image
+                  src={url}
+                  alt={`${animal.nome ?? 'Animal'} — foto ${i + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Conteúdo */}
         <div className="p-8">
           <div className="flex items-start justify-between gap-4 mb-6">
-            <h1 className="text-3xl font-bold text-gray-800">{animal.nome}</h1>
+            <h1 className="text-3xl font-bold text-gray-800">{animal.nome ?? 'Sem nome'}</h1>
             <div className="flex flex-wrap gap-2 shrink-0">
               <span className="text-sm bg-orange-100 text-orange-700 px-3 py-1 rounded-full capitalize">
                 {animal.porte}
@@ -65,6 +107,11 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
                   Castrado
                 </span>
               )}
+              {animal.vacinado && (
+                <span className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+                  Vacinado
+                </span>
+              )}
             </div>
           </div>
 
@@ -74,14 +121,18 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
             <InfoItem label="Porte" value={porteLabel[animal.porte] ?? animal.porte} />
             <InfoItem label="Sexo" value={animal.sexo === 'macho' ? 'Macho' : 'Fêmea'} />
             <InfoItem label="Castrado" value={animal.castrado ? 'Sim' : 'Não'} />
-            {animal.idade && <InfoItem label="Idade" value={animal.idade} />}
+            {animal.idade_estimada && (
+              <InfoItem label="Idade estimada" value={animal.idade_estimada} />
+            )}
             {animal.raca && <InfoItem label="Raça" value={animal.raca} />}
           </div>
 
           {/* Descrição */}
           {animal.descricao && (
             <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-700 mb-2">Sobre {animal.nome}</h2>
+              <h2 className="text-lg font-semibold text-gray-700 mb-2">
+                Sobre {animal.nome ?? 'o animal'}
+              </h2>
               <p className="text-gray-600 leading-relaxed whitespace-pre-line">{animal.descricao}</p>
             </div>
           )}
@@ -90,7 +141,7 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
           {animal.status === 'disponivel' && (
             <div className="bg-orange-50 rounded-xl p-6 text-center">
               <p className="text-gray-600 mb-4">
-                Tem interesse em adotar <strong>{animal.nome}</strong>? Entre em contato com o responsável.
+                Tem interesse em adotar <strong>{animal.nome ?? 'este animal'}</strong>? Entre em contato com o responsável.
               </p>
               {animal.contato ? (
                 <a
