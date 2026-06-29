@@ -7,6 +7,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
 ## [Não publicado]
 
+### Corrigido
+- `middleware.ts`: removida interceptação de `/admin/*` que redirecionava para `/login` via Supabase Auth antes da página carregar. O painel admin usa auth própria por senha (`ADMIN_PASSWORD`) gerenciada no `page.tsx`, não Supabase Auth.
+
 ### Adicionado
 - `lib/tempo.ts`: utilitário `tempoRelativo(dataStr)` que retorna strings como "há 2 dias", "há 3 horas"
 - Exibição de tempo relativo ("Publicado há X dias") nos cards da listagem `/animais` e no cabeçalho da página `/animais/[id]`

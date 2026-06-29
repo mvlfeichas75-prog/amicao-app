@@ -34,7 +34,7 @@ npm run dev
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Chave anon do Supabase |
 | `RESEND_API_KEY` | Chave de API do [Resend](https://resend.com) (envio de e-mails) |
-| `ADMIN_PASSWORD` | Senha de acesso ao painel `/admin` |
+| `ADMIN_PASSWORD` | Senha de acesso ao painel `/admin` (auth independente do Supabase Auth) |
 
 ## Banco de dados (Supabase)
 
