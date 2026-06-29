@@ -6,7 +6,7 @@
 
 #### Página de detalhes `/animais/[id]`
 - `BotaoRemover.tsx` — Client Component para remover o anúncio completo com `window.confirm()`, delete no Supabase e redirect para `/animais`
-- `GaleriaFotos.tsx` — galeria interativa com `useState`: clicar em miniatura atualiza a foto principal; remoção de foto individual (deleta do Storage e atualiza `foto_url` no banco); botão hover na foto principal e X nas miniaturas
+- `GaleriaFotos.tsx` — galeria interativa com `useState`: clicar em miniatura atualiza a foto principal; remoção de foto individual (deleta do Storage e atualiza `foto_url` no banco); botão hover na foto principal e X nas miniaturas; upload de novas fotos diretamente na galeria — botão `+` aparece na strip quando há vagas ou na área vazia quando não há nenhuma foto; faz upload para o Storage, atualiza `foto_url` no banco e reflete o resultado no estado local sem reload
 - Seções de **Saúde**, **Comportamento** e **Histórico** exibidas na página, com labels legíveis para os valores do banco; seções se ocultam automaticamente quando todos os campos estão vazios
 - Badges de vacinado e "passou por vet" no cabeçalho
 - Componentes auxiliares `Titulo`, `Badge` e `InfoItem`

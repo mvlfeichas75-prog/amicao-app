@@ -91,7 +91,8 @@ Bucket `animais` (criado pelo `setup.sql`):
 - **Formatos**: JPG, PNG, WEBP, GIF
 - **Path**: `{timestamp}-{random}.{ext}`
 - `foto_url` armazena um array JSON com até 5 URLs por animal
-- Fotos individuais podem ser removidas pelo usuário diretamente na página de detalhes (deleta do Storage e atualiza o array no banco)
+- Fotos individuais podem ser removidas diretamente na página de detalhes (deleta do Storage e atualiza o array no banco)
+- Novas fotos podem ser adicionadas na página de detalhes enquanto o total for menor que 5 — botão aparece na strip de miniaturas ou na área vazia
 
 ### Políticas RLS requeridas
 
