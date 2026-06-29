@@ -71,7 +71,49 @@ CREATE POLICY "animais: update público"
   ON public.animais FOR UPDATE USING (true) WITH CHECK (true);
 
 -- -------------------------------------------------------------
--- 2. Novas colunas — execute se a tabela animais já existia
+-- 2. Tabela usuarios (vinculada ao Supabase Auth)
+-- -------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.usuarios (
+  id            uuid        PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  nome          text        NOT NULL,
+  email         text        NOT NULL,
+  telefone      text,
+  cidade        text        NOT NULL,
+  estado        text        NOT NULL DEFAULT 'SP',
+  tipo_perfil   text        NOT NULL DEFAULT 'adotante'
+                            CHECK (tipo_perfil IN ('resgatador', 'adotante', 'ong', 'parceiro')),
+  nivel         integer     NOT NULL DEFAULT 2,
+  verificado    boolean     NOT NULL DEFAULT false,
+  ativo         boolean     NOT NULL DEFAULT true,
+  criado_em     timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.usuarios ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "usuarios: leitura própria"  ON public.usuarios;
+DROP POLICY IF EXISTS "usuarios: insert próprio"   ON public.usuarios;
+DROP POLICY IF EXISTS "usuarios: update próprio"   ON public.usuarios;
+
+CREATE POLICY "usuarios: leitura própria"
+  ON public.usuarios FOR SELECT
+  USING (auth.uid() = id);
+
+CREATE POLICY "usuarios: insert próprio"
+  ON public.usuarios FOR INSERT
+  WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "usuarios: update próprio"
+  ON public.usuarios FOR UPDATE
+  USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+
+-- Migração: adiciona colunas se a tabela usuarios já existia
+ALTER TABLE public.usuarios
+  ADD COLUMN IF NOT EXISTS nivel       integer NOT NULL DEFAULT 2,
+  ADD COLUMN IF NOT EXISTS verificado  boolean NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS ativo       boolean NOT NULL DEFAULT true;
+
+-- -------------------------------------------------------------
+-- 3. Novas colunas — execute se a tabela animais já existia
 -- -------------------------------------------------------------
 ALTER TABLE public.animais
   ADD COLUMN IF NOT EXISTS passou_por_vet      boolean     NOT NULL DEFAULT false,

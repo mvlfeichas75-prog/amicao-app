@@ -4,6 +4,16 @@
 
 ### Added
 
+#### Autenticação e níveis de usuário
+- **`lib/auth-context.tsx`** — `AuthProvider` com contexto global de autenticação; expõe `user`, `perfil`, `loading`, `login()`, `logout()` e `cadastrar()`; escuta `onAuthStateChange` e carrega o perfil da tabela `usuarios`
+- **`app/NavBar.tsx`** — Client Component extraído do layout; exibe Entrar + Cadastrar quando deslogado, nome do usuário + Sair quando logado, link Admin para nível ≥ 3
+- **`app/layout.tsx`** — envolve a aplicação em `AuthProvider` e usa `NavBar`; mantém `metadata` no Server Component
+- **`app/cadastro/page.tsx`** — formulário com nome, email, senha, confirmar senha, telefone, cidade, estado e tipo de perfil (adotante/resgatador/ong/parceiro); cria usuário no Supabase Auth e insere na tabela `usuarios` com `nivel=2`; mostra tela de confirmação de email quando necessário
+- **`app/login/page.tsx`** — formulário email/senha com link para cadastro; link "Esqueci minha senha" abre modo de recuperação via `supabase.auth.resetPasswordForEmail`
+- **`middleware.ts`** — protege `/admin/:path*`; redireciona para `/login` se não autenticado e para `/` se `nivel < 3`; usa `@supabase/ssr` `createServerClient` para ler a sessão dos cookies e consultar `nivel` na tabela `usuarios`
+- Tabela `usuarios` adicionada ao `supabase/setup.sql` com colunas `nivel` (integer, default 2), `verificado` (boolean), `ativo` (boolean) e RLS com políticas de leitura/insert/update próprio
+- Pacote `@supabase/ssr` adicionado às dependências
+
 #### Reenvio de código no modal de gerenciamento
 - Link "Não tenho o código" abaixo do botão Confirmar no modal — ao clicar, exibe campo de email e botão "Reenviar código"
 - API route `POST /api/reenviar-codigo` — verifica se o email informado corresponde ao `email_anunciante` do anúncio e, se sim, reenviaо código; sempre retorna `{ ok: true }` para evitar enumeração de emails

@@ -16,7 +16,9 @@ Plataforma para conectar cães abandonados a lares amorosos.
 | `/animais` | Listagem com filtros e paginação |
 | `/animais/novo` | Formulário para cadastrar e anunciar um cão |
 | `/animais/[id]` | Detalhes de um animal |
-| `/cadastro` | Cadastro de usuário |
+| `/cadastro` | Cadastro de usuário (nome, email, senha, cidade, estado, perfil) |
+| `/login` | Login com email/senha e recuperação de senha |
+| `/admin` | Área restrita — nível de usuário ≥ 3 |
 
 ## Filtros e paginação
 
@@ -70,6 +72,23 @@ O script cria:
 
 > **Nota:** todas as políticas usam `true`/sem restrição de usuário. Quando implementar autenticação, restrinja as políticas de `INSERT`/`DELETE` para `auth.uid() = owner_id`.
 
+## Autenticação
+
+O sistema usa **Supabase Auth** (email/senha). Ao criar conta, o usuário é inserido em `auth.users` e na tabela `public.usuarios`.
+
+### Níveis de usuário (`nivel`)
+
+| Nível | Descrição |
+|---|---|
+| 2 | Usuário padrão (default ao cadastrar) |
+| 3+ | Acesso à área `/admin` |
+
+Para promover um usuário, atualize `nivel` diretamente no painel do Supabase (Table Editor → `usuarios`).
+
+### Recuperação de senha
+
+Na página `/login`, o link "Esqueci minha senha" aciona `supabase.auth.resetPasswordForEmail`. O Supabase envia o link de redefinição para o email cadastrado.
+
 ## Schema da tabela `animais`
 
 | Coluna | Tipo | Detalhes |
@@ -107,6 +126,22 @@ O script cria:
 | **Gerenciamento** | | |
 | `email_anunciante` | text | email para receber o código; não exibido publicamente |
 | `codigo_gerenciamento` | text | código de 6 dígitos gerado no cadastro |
+| `criado_em` | timestamptz | default `now()` |
+
+## Schema da tabela `usuarios`
+
+| Coluna | Tipo | Detalhes |
+|---|---|---|
+| `id` | uuid | PK, referencia `auth.users(id)` |
+| `nome` | text | obrigatório |
+| `email` | text | obrigatório |
+| `telefone` | text | opcional |
+| `cidade` | text | obrigatório |
+| `estado` | text | sigla, default SP |
+| `tipo_perfil` | text | `resgatador` / `adotante` / `ong` / `parceiro` |
+| `nivel` | integer | default 2; ≥ 3 = acesso admin |
+| `verificado` | boolean | default false |
+| `ativo` | boolean | default true |
 | `criado_em` | timestamptz | default `now()` |
 
 ## Imagens externas
