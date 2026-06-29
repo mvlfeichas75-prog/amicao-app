@@ -8,6 +8,10 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [Não publicado]
 
 ### Adicionado
+- Botão "Tenho interesse" na página do animal substitui o botão "Contato indisponível"; abre modal com formulário de nome, email, telefone (opcional) e motivo
+- `app/animais/[id]/ModalInteresse.tsx`: componente client do formulário de interesse com tela de sucesso após envio
+- `app/api/interesse/route.ts`: salva interesse na tabela `adocoes` (status `interesse`) e envia email de notificação para o anunciante via Resend
+- Migration `20260629000001_create_adocoes.sql`: cria tabela `adocoes` com colunas `animal_id`, `nome`, `email`, `telefone`, `motivo`, `status` e `criado_em`
 - `lib/email.ts`: abstração central de envio de e-mail via Resend SDK com função `sendEmail(destinatario, assunto, corpo)`
 - Migration `20260629000000_add_missing_columns_animais.sql`: adiciona colunas faltantes à tabela `animais` no Supabase
   - `alimentacao` — tipo de alimentação do animal (`racao`, `caseira`, `misto`)

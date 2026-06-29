@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { parseFotos } from '@/lib/fotos'
 import GaleriaFotos from './GaleriaFotos'
 import ModalGerenciar from './ModalGerenciar'
+import ModalInteresse from './ModalInteresse'
 
 const PORTE_LABEL: Record<string, string> = {
   pequeno: 'Pequeno (até 10 kg)',
@@ -148,9 +149,7 @@ export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
                   Quero adotar
                 </a>
               ) : (
-                <button disabled className="bg-gray-200 text-gray-400 font-bold px-8 py-3 rounded-full cursor-not-allowed">
-                  Contato indisponível
-                </button>
+                <ModalInteresse animalId={id} nomeAnimal={nomeExibido} />
               )}
             </div>
           )}

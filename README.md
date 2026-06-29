@@ -48,6 +48,7 @@ Execute os arquivos em `supabase/migrations/` **em ordem cronológica** (prefixo
 | Arquivo | Descrição |
 |---|---|
 | `20260629000000_add_missing_columns_animais.sql` | Adiciona colunas de comportamento, saúde, histórico e gerenciamento à tabela `animais` |
+| `20260629000001_create_adocoes.sql` | Cria tabela `adocoes` para registrar interesses de adoção |
 
 ## Tabela `animais` — colunas principais
 
