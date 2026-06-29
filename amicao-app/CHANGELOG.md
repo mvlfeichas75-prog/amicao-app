@@ -3,6 +3,12 @@
 ## [Unreleased]
 
 ### Added
+- `app/animais/[id]/page.tsx` — página de detalhes do animal
+  - Foto em destaque com badge "Adotado" quando aplicável
+  - Grid de informações: localização, porte, sexo, castrado, idade e raça
+  - Descrição livre do animal
+  - CTA de adoção com link para WhatsApp (campo `contato`) ou botão desabilitado
+  - 404 automático via `notFound()` quando o id não existe
 - `app/animais/page.tsx` — listagem de cães disponíveis para adoção
   - Busca animais com `status = 'disponivel'` no Supabase, ordenados por data decrescente
   - Grid responsivo de cards (1/2/3 colunas) com foto, nome, cidade, estado, porte, sexo e badge de castrado
