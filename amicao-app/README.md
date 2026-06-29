@@ -20,33 +20,56 @@ Plataforma para conectar cães abandonados a lares amorosos.
 
 ## Configuração
 
-Crie um arquivo `.env.local` na raiz do projeto:
+### 1. Variáveis de ambiente
+
+Crie `amicao-app/.env.local`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://<seu-projeto>.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<sua-chave-anon>
 ```
 
-## Schema esperado (tabela `animais`)
+### 2. Banco de dados e Storage
 
-| Coluna | Tipo | Valores |
+Execute o arquivo `supabase/setup.sql` no **SQL Editor** do seu projeto Supabase:
+
+> Dashboard → SQL Editor → New query → cole o conteúdo de `supabase/setup.sql` → Run
+
+O script cria:
+- Tabela `animais` com todas as colunas e constraints
+- Políticas de RLS para leitura e escrita públicas (adequado para MVP sem autenticação)
+- Bucket `animais` no Storage (público, limite de 5 MB, aceita JPG/PNG/WEBP/GIF)
+- Políticas de RLS do Storage para leitura e upload públicos
+
+> **Nota:** todas as políticas usam `true`/sem restrição de usuário. Quando implementar autenticação, restrinja as políticas de `INSERT`/`DELETE` para `auth.uid() = owner_id`.
+
+## Schema da tabela `animais`
+
+| Coluna | Tipo | Detalhes |
 |---|---|---|
-| `id` | uuid | PK |
-| `nome` | text | |
-| `cidade` | text | |
-| `estado` | text | sigla (ex: SP) |
-| `porte` | text | pequeno / médio / grande |
-| `sexo` | text | macho / fêmea |
+| `id` | uuid | PK, gerado automaticamente |
+| `nome` | text | opcional |
+| `descricao` | text | opcional |
+| `idade` | text | texto livre (ex: "2 anos") |
+| `porte` | text | `pequeno` / `medio` / `grande` |
+| `sexo` | text | `macho` / `femea` / `desconhecido` |
 | `castrado` | boolean | |
-| `foto_url` | text | JSON array de URLs públicas (ex: `["url1","url2"]`) |
-| `status` | text | disponivel / adotado |
 | `vacinado` | boolean | |
-| `contato` | text | número WhatsApp (opcional) |
-| `created_at` | timestamptz | default now() |
+| `cidade` | text | obrigatório |
+| `estado` | text | sigla, ex: SP |
+| `foto_url` | text | JSON array de URLs (ex: `["url1","url2"]`) — até 5 fotos |
+| `status` | text | `disponivel` / `adotado` |
+| `contato` | text | número WhatsApp, opcional |
+| `created_at` | timestamptz | default `now()` |
 
-### Storage
+## Storage
 
-Crie um bucket público chamado `animais` no Supabase Storage. As fotos são salvas com path `{timestamp}-{random}.{ext}` e as URLs são armazenadas em `foto_url` como array JSON (suporta até 5 fotos por animal).
+Bucket `animais` (criado pelo `setup.sql`):
+- **Público**: URLs acessíveis sem token de autenticação
+- **Limite**: 5 MB por arquivo
+- **Formatos**: JPG, PNG, WEBP, GIF
+- **Path**: `{timestamp}-{random}.{ext}`
+- `foto_url` armazena um array JSON com até 5 URLs por animal
 
 ## Rodando localmente
 

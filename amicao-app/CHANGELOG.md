@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `supabase/setup.sql` — script de setup completo: tabela `animais`, bucket `animais` no Storage e políticas de RLS para leitura e upload públicos
+- README: instruções passo a passo para configurar banco e Storage via SQL Editor
 - `app/animais/novo/page.tsx` — formulário de cadastro de novo animal (Client Component)
   - Campos: nome (opcional), descrição, idade estimada, porte, sexo, castrado, vacinado, cidade, estado, fotos
   - Upload de 1 a 5 fotos para Supabase Storage (bucket `animais`); URLs salvas como array JSON em `foto_url`
