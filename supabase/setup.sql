@@ -21,7 +21,27 @@ CREATE TABLE IF NOT EXISTS public.animais (
   foto_url    text,                        -- JSON array de URLs, ex: '["url1","url2"]'
   status      text        NOT NULL DEFAULT 'disponivel'
                           CHECK (status IN ('disponivel', 'adotado')),
-  contato     text,
+  -- Saúde
+  passou_por_vet      boolean     NOT NULL DEFAULT false,
+  condicao_saude      text,
+  medicamento         text,
+  -- Comportamento
+  alimentacao         text        CHECK (alimentacao IN ('racao', 'caseira', 'misto')),
+  convive_criancas    text        NOT NULL DEFAULT 'nao_testado'
+                                  CHECK (convive_criancas IN ('sim', 'nao', 'nao_testado')),
+  convive_caes        text        NOT NULL DEFAULT 'nao_testado'
+                                  CHECK (convive_caes IN ('sim', 'nao', 'nao_testado')),
+  convive_gatos       text        NOT NULL DEFAULT 'nao_testado'
+                                  CHECK (convive_gatos IN ('sim', 'nao', 'nao_testado')),
+  comportamento_especial text,
+  -- Histórico
+  tinha_dono          boolean     NOT NULL DEFAULT false,
+  foi_resgatado       boolean     NOT NULL DEFAULT false,
+  tempo_nas_ruas      text,
+  -- Contato privado do resgatador (não exibido publicamente)
+  contato             text,
+  resgatador_nome     text,
+  resgatador_contato  text,
   criado_em   timestamptz NOT NULL DEFAULT now()
 );
 
@@ -38,7 +58,28 @@ CREATE POLICY "animais: insert público"
   ON public.animais FOR INSERT WITH CHECK (true);
 
 -- -------------------------------------------------------------
--- 2. Storage — bucket animais
+-- 2. Novas colunas — execute se a tabela animais já existia
+-- -------------------------------------------------------------
+ALTER TABLE public.animais
+  ADD COLUMN IF NOT EXISTS passou_por_vet      boolean     NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS condicao_saude      text,
+  ADD COLUMN IF NOT EXISTS medicamento         text,
+  ADD COLUMN IF NOT EXISTS alimentacao         text        CHECK (alimentacao IN ('racao', 'caseira', 'misto')),
+  ADD COLUMN IF NOT EXISTS convive_criancas    text        NOT NULL DEFAULT 'nao_testado'
+                                               CHECK (convive_criancas IN ('sim', 'nao', 'nao_testado')),
+  ADD COLUMN IF NOT EXISTS convive_caes        text        NOT NULL DEFAULT 'nao_testado'
+                                               CHECK (convive_caes IN ('sim', 'nao', 'nao_testado')),
+  ADD COLUMN IF NOT EXISTS convive_gatos       text        NOT NULL DEFAULT 'nao_testado'
+                                               CHECK (convive_gatos IN ('sim', 'nao', 'nao_testado')),
+  ADD COLUMN IF NOT EXISTS comportamento_especial text,
+  ADD COLUMN IF NOT EXISTS tinha_dono          boolean     NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS foi_resgatado       boolean     NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS tempo_nas_ruas      text,
+  ADD COLUMN IF NOT EXISTS resgatador_nome     text,
+  ADD COLUMN IF NOT EXISTS resgatador_contato  text;
+
+-- -------------------------------------------------------------
+-- 3. Storage — bucket animais
 -- -------------------------------------------------------------
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES (

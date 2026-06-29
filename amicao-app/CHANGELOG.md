@@ -3,6 +3,13 @@
 ## [Unreleased]
 
 ### Added
+- `app/animais/novo/page.tsx` — novos campos no formulário de cadastro, organizados em seções visuais:
+  - **Saúde**: passou por veterinário (checkbox), condição de saúde, medicamento em uso
+  - **Comportamento**: alimentação (ração/caseira/misto), convivência com crianças/cães/gatos (sim/não/não testado), comportamento especial
+  - **Histórico**: tinha dono anterior, já foi resgatado, tempo nas ruas
+  - **Contato do resgatador**: nome e WhatsApp/e-mail com aviso de privacidade (não exibido publicamente)
+  - Componentes auxiliares `Secao` e `Checkbox` extraídos para reduzir repetição
+- `supabase/setup.sql` — 13 novas colunas na tabela `animais`; seção `ALTER TABLE ADD COLUMN IF NOT EXISTS` para migrar tabelas existentes
 - `lib/fotos.ts` — utilitário `parseFotos` compartilhado entre páginas: parseia `foto_url` como JSON array com fallback para URL simples (compatibilidade com registros antigos)
 - `supabase/setup.sql` — script de setup completo: tabela `animais`, bucket `animais` no Storage e políticas de RLS para leitura e upload públicos; README atualizado com instruções passo a passo
 - `app/animais/novo/page.tsx` — formulário de cadastro de novo animal (Client Component)

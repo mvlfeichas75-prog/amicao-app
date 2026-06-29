@@ -59,7 +59,24 @@ O script cria:
 | `estado` | text | sigla, ex: SP |
 | `foto_url` | text | JSON array de URLs (ex: `["url1","url2"]`) — até 5 fotos |
 | `status` | text | `disponivel` / `adotado` |
-| `contato` | text | número WhatsApp, opcional |
+| **Saúde** | | |
+| `passou_por_vet` | boolean | default false |
+| `condicao_saude` | text | opcional |
+| `medicamento` | text | opcional |
+| **Comportamento** | | |
+| `alimentacao` | text | `racao` / `caseira` / `misto` |
+| `convive_criancas` | text | `sim` / `nao` / `nao_testado` |
+| `convive_caes` | text | `sim` / `nao` / `nao_testado` |
+| `convive_gatos` | text | `sim` / `nao` / `nao_testado` |
+| `comportamento_especial` | text | opcional |
+| **Histórico** | | |
+| `tinha_dono` | boolean | default false |
+| `foi_resgatado` | boolean | default false |
+| `tempo_nas_ruas` | text | opcional |
+| **Contato privado** | | |
+| `contato` | text | WhatsApp público para adotante |
+| `resgatador_nome` | text | não exibido publicamente |
+| `resgatador_contato` | text | não exibido publicamente |
 | `criado_em` | timestamptz | default `now()` |
 
 ## Imagens externas
