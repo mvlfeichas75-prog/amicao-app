@@ -61,13 +61,15 @@ export default async function AnimaisPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {animais.map((animal) => (
+          {animais.map((animal) => {
+            const fotoCard = parseFotos(animal.foto_url)[0]
+            return (
             <Link key={animal.id} href={`/animais/${animal.id}`}>
               <div className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition">
                 <div className="relative h-52 bg-orange-50">
-                  {parseFotos(animal.foto_url)[0] ? (
+                  {fotoCard ? (
                     <Image
-                      src={parseFotos(animal.foto_url)[0]}
+                      src={fotoCard}
                       alt={animal.nome ?? 'Foto do animal'}
                       fill
                       className="object-cover"
@@ -97,7 +99,7 @@ export default async function AnimaisPage() {
                 </div>
               </div>
             </Link>
-          ))}
+          )})}
         </div>
       )}
     </div>

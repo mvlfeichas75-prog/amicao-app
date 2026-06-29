@@ -91,8 +91,12 @@ export default function NovoAnimalPage() {
         status: 'disponivel',
       })
 
-      if (insertErro) throw new Error(insertErro.message)
+      if (insertErro) {
+        console.error('Supabase insert error:', insertErro)
+        throw new Error(insertErro.message)
+      }
 
+      router.refresh() // invalida o cache client-side da rota /animais
       router.push('/animais')
     } catch (err) {
       setErro(err instanceof Error ? err.message : 'Erro inesperado. Tente novamente.')
