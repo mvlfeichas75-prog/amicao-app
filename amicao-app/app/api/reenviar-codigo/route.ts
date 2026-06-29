@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { Resend } from 'resend'
+import { sendEmail } from '@/lib/email'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 )
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
   const { animalId, email } = await req.json()
@@ -27,12 +26,10 @@ export async function POST(req: NextRequest) {
     data.codigo_gerenciamento
 
   if (corresponde) {
-    resend.emails
-      .send({
-        from: 'Amicão <onboarding@resend.dev>',
-        to: data.email_anunciante,
-        subject: 'Seu código de gerenciamento — Amicão (reenvio)',
-        html: `
+    sendEmail(
+      data.email_anunciante,
+      'Seu código de gerenciamento — Amicão (reenvio)',
+      `
           <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;">
             <h1 style="color:#f97316;font-size:24px;margin-bottom:8px;">Amicão</h1>
             <p style="color:#374151;font-size:15px;margin-bottom:16px;">
@@ -48,8 +45,7 @@ export async function POST(req: NextRequest) {
             </p>
           </div>
         `,
-      })
-      .catch(err => console.error('[amicao] erro ao reenviar email:', err))
+    ).catch(err => console.error('[amicao] erro ao reenviar email:', err))
   }
 
   return NextResponse.json({ ok: true })

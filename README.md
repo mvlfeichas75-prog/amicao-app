@@ -6,6 +6,7 @@ Plataforma de adoção de animais resgatados. Conecta resgatadores a potenciais 
 
 - **Frontend**: Next.js 14 (App Router) + Tailwind CSS
 - **Backend/DB**: Supabase (PostgreSQL + Auth + Storage)
+- **Email**: Resend (`lib/email.ts`)
 - **Linguagem**: TypeScript
 
 ## Estrutura do projeto
@@ -22,9 +23,17 @@ supabase/
 ```bash
 cd amicao-app
 npm install
-cp .env.example .env.local   # preencha NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY
+cp .env.example .env.local   # preencha as variáveis abaixo
 npm run dev
 ```
+
+### Variáveis de ambiente (`.env.local`)
+
+| Variável | Descrição |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Chave anon do Supabase |
+| `RESEND_API_KEY` | Chave de API do [Resend](https://resend.com) (envio de e-mails) |
 
 ## Banco de dados (Supabase)
 

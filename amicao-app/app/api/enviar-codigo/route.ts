@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { sendEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
   const { email, codigo, nomeAnimal } = await req.json()
@@ -11,11 +9,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await resend.emails.send({
-      from: 'Amicão <onboarding@resend.dev>',
-      to: email,
-      subject: 'Seu código de gerenciamento — Amicão',
-      html: `
+    await sendEmail(
+      email,
+      'Seu código de gerenciamento — Amicão',
+      `
         <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;">
           <h1 style="color:#f97316;font-size:24px;margin-bottom:8px;">Amicão</h1>
           <p style="color:#374151;font-size:16px;margin-bottom:24px;">
@@ -33,7 +30,7 @@ export async function POST(req: NextRequest) {
           </p>
         </div>
       `,
-    })
+    )
     return NextResponse.json({ ok: true })
   } catch (err) {
     console.error('[amicao] erro ao enviar email:', err)

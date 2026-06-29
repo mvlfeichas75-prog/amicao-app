@@ -8,6 +8,7 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [Não publicado]
 
 ### Adicionado
+- `lib/email.ts`: abstração central de envio de e-mail via Resend SDK com função `sendEmail(destinatario, assunto, corpo)`
 - Migration `20260629000000_add_missing_columns_animais.sql`: adiciona colunas faltantes à tabela `animais` no Supabase
   - `alimentacao` — tipo de alimentação do animal (`racao`, `caseira`, `misto`)
   - `convive_criancas`, `convive_caes`, `convive_gatos` — compatibilidade com outros moradores
@@ -17,7 +18,11 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
   - `passou_por_vet` — indicador de avaliação veterinária
   - `condicao_saude`, `medicamento` — informações de saúde
   - `email_anunciante`, `codigo_gerenciamento` — dados de gerenciamento do anúncio
-- `README.md` com documentação de setup, estrutura e schema principal
+- `README.md` com documentação de setup, estrutura, variáveis de ambiente e schema principal
+
+### Alterado
+- `app/api/enviar-codigo/route.ts`: usa `sendEmail` de `@/lib/email` em vez de instanciar Resend diretamente
+- `app/api/reenviar-codigo/route.ts`: idem
 
 ---
 
