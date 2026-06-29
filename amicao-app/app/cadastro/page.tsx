@@ -11,6 +11,42 @@ const ESTADOS_BR = [
   'SP','SE','TO',
 ]
 
+const BENEFICIOS = [
+  {
+    icone: '🐾',
+    titulo: 'Resgatador',
+    cor: 'bg-orange-50 border-orange-100',
+    corIcone: 'bg-orange-100 text-orange-600',
+    itens: [
+      'Gerencie todos os anúncios em um painel',
+      'Sem precisar de código por anúncio',
+      'Histórico completo de resgates',
+    ],
+  },
+  {
+    icone: '🏠',
+    titulo: 'Adotante',
+    cor: 'bg-amber-50 border-amber-100',
+    corIcone: 'bg-amber-100 text-amber-600',
+    itens: [
+      'Acompanhe suas solicitações de adoção',
+      'Receba atualizações dos anúncios salvos',
+      'Histórico de adoções realizadas',
+    ],
+  },
+  {
+    icone: '🤝',
+    titulo: 'ONG ou Parceiro',
+    cor: 'bg-green-50 border-green-100',
+    corIcone: 'bg-green-100 text-green-600',
+    itens: [
+      'Perfil público verificado com badge',
+      'Destaque na busca de animais',
+      'Dados de contato visíveis aos adotantes',
+    ],
+  },
+]
+
 export default function CadastroPage() {
   const router = useRouter()
   const { cadastrar } = useAuth()
@@ -75,8 +111,10 @@ export default function CadastroPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-6 py-10">
-      <div className="text-center mb-8">
+    <div className="max-w-5xl mx-auto px-6 py-10">
+
+      {/* Cabeçalho */}
+      <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Criar conta</h1>
         <p className="text-gray-500">
           Já tem conta?{' '}
@@ -86,67 +124,93 @@ export default function CadastroPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-8 space-y-5">
-        <Field label="Nome completo *">
-          <input type="text" value={nome} onChange={e => setNome(e.target.value)}
-            placeholder="Seu nome" required className={inputClass} />
-        </Field>
+      {/* Cards de benefícios */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+        {BENEFICIOS.map(b => (
+          <div
+            key={b.titulo}
+            className={`rounded-2xl border p-6 space-y-4 ${b.cor}`}
+          >
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${b.corIcone}`}>
+              {b.icone}
+            </div>
+            <h2 className="text-base font-bold text-gray-800">{b.titulo}</h2>
+            <ul className="space-y-2">
+              {b.itens.map(item => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
+                  <span className="text-orange-400 mt-0.5 shrink-0">✓</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
 
-        <Field label="Email *">
-          <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-            placeholder="voce@email.com" required className={inputClass} />
-        </Field>
+      {/* Formulário centralizado */}
+      <div className="max-w-lg mx-auto">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-8 space-y-5">
+          <Field label="Nome completo *">
+            <input type="text" value={nome} onChange={e => setNome(e.target.value)}
+              placeholder="Seu nome" required className={inputClass} />
+          </Field>
 
-        <Field label="Senha *">
-          <input type="password" value={senha} onChange={e => setSenha(e.target.value)}
-            placeholder="Mínimo 6 caracteres" required minLength={6} className={inputClass} />
-        </Field>
+          <Field label="Email *">
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="voce@email.com" required className={inputClass} />
+          </Field>
 
-        <Field label="Confirmar senha *">
-          <input type="password" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)}
-            placeholder="Repita a senha" required className={inputClass} />
-        </Field>
+          <Field label="Senha *">
+            <input type="password" value={senha} onChange={e => setSenha(e.target.value)}
+              placeholder="Mínimo 6 caracteres" required minLength={6} className={inputClass} />
+          </Field>
 
-        <Field label="Telefone (opcional)">
-          <input type="tel" value={telefone} onChange={e => setTelefone(e.target.value)}
-            placeholder="(11) 99999-9999" className={inputClass} />
-        </Field>
+          <Field label="Confirmar senha *">
+            <input type="password" value={confirmarSenha} onChange={e => setConfirmarSenha(e.target.value)}
+              placeholder="Repita a senha" required className={inputClass} />
+          </Field>
 
-        <div className="grid grid-cols-3 gap-3">
-          <div className="col-span-2">
-            <Field label="Cidade *">
-              <input type="text" value={cidade} onChange={e => setCidade(e.target.value)}
-                placeholder="Sua cidade" required className={inputClass} />
+          <Field label="Telefone (opcional)">
+            <input type="tel" value={telefone} onChange={e => setTelefone(e.target.value)}
+              placeholder="(11) 99999-9999" className={inputClass} />
+          </Field>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div className="col-span-2">
+              <Field label="Cidade *">
+                <input type="text" value={cidade} onChange={e => setCidade(e.target.value)}
+                  placeholder="Sua cidade" required className={inputClass} />
+              </Field>
+            </div>
+            <Field label="Estado">
+              <select value={estado} onChange={e => setEstado(e.target.value)} className={inputClass}>
+                {ESTADOS_BR.map(uf => <option key={uf} value={uf}>{uf}</option>)}
+              </select>
             </Field>
           </div>
-          <Field label="Estado">
-            <select value={estado} onChange={e => setEstado(e.target.value)} className={inputClass}>
-              {ESTADOS_BR.map(uf => <option key={uf} value={uf}>{uf}</option>)}
+
+          <Field label="Tipo de perfil *">
+            <select value={tipoPerfil} onChange={e => setTipoPerfil(e.target.value)} className={inputClass}>
+              <option value="adotante">Adotante</option>
+              <option value="resgatador">Resgatador</option>
+              <option value="ong">ONG</option>
+              <option value="parceiro">Parceiro</option>
             </select>
           </Field>
-        </div>
 
-        <Field label="Tipo de perfil *">
-          <select value={tipoPerfil} onChange={e => setTipoPerfil(e.target.value)} className={inputClass}>
-            <option value="adotante">Adotante</option>
-            <option value="resgatador">Resgatador</option>
-            <option value="ong">ONG</option>
-            <option value="parceiro">Parceiro</option>
-          </select>
-        </Field>
+          {erro && (
+            <div className="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">{erro}</div>
+          )}
 
-        {erro && (
-          <div className="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">{erro}</div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-orange-500 text-white font-bold py-3 rounded-full hover:bg-orange-600 transition disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Criando conta…' : 'Criar conta'}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-orange-500 text-white font-bold py-3 rounded-full hover:bg-orange-600 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Criando conta…' : 'Criar conta'}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }

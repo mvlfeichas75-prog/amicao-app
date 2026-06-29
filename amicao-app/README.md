@@ -16,7 +16,7 @@ Plataforma para conectar cães abandonados a lares amorosos.
 | `/animais` | Listagem com filtros e paginação |
 | `/animais/novo` | Formulário para cadastrar e anunciar um cão |
 | `/animais/[id]` | Detalhes de um animal |
-| `/cadastro` | Cadastro de usuário (nome, email, senha, cidade, estado, perfil) |
+| `/cadastro` | Cadastro de usuário — cards de benefícios por perfil + formulário |
 | `/login` | Login com email/senha e recuperação de senha |
 | `/admin` | Área restrita — nível de usuário ≥ 3 |
 

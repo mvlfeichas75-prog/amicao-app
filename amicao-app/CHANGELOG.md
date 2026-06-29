@@ -4,6 +4,14 @@
 
 ### Added
 
+#### Seção de benefícios na página de cadastro
+- Três cards explicativos exibidos antes do formulário em grid responsivo (1 col mobile / 3 col desktop)
+- **Resgatador** — painel único sem código por anúncio, histórico de resgates
+- **Adotante** — acompanhamento de solicitações, atualizações, histórico de adoções
+- **ONG ou Parceiro** — badge de verificado, destaque na busca, contato visível
+- Cada card tem ícone, título e lista de benefícios com ✓ laranja; cores distintas por perfil (laranja / âmbar / verde)
+- Layout da página ampliado para `max-w-5xl` para acomodar os cards; formulário mantido em `max-w-lg` centralizado abaixo
+
 #### Autenticação e níveis de usuário
 - **`lib/auth-context.tsx`** — `AuthProvider` com contexto global de autenticação; expõe `user`, `perfil`, `loading`, `login()`, `logout()` e `cadastrar()`; escuta `onAuthStateChange` e carrega o perfil da tabela `usuarios`
 - **`app/NavBar.tsx`** — Client Component extraído do layout; exibe Entrar + Cadastrar quando deslogado, nome do usuário + Sair quando logado, link Admin para nível ≥ 3
