@@ -50,7 +50,7 @@ O script cria:
 | `id` | uuid | PK, gerado automaticamente |
 | `nome` | text | opcional |
 | `descricao` | text | opcional |
-| `idade` | text | texto livre (ex: "2 anos") |
+| `idade_estimada` | text | texto livre (ex: "2 anos") |
 | `porte` | text | `pequeno` / `medio` / `grande` |
 | `sexo` | text | `macho` / `femea` / `desconhecido` |
 | `castrado` | boolean | |

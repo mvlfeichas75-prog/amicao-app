@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.animais (
   id          uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
   nome        text,
   descricao   text,
-  idade       text,
+  idade_estimada text,
   porte       text        NOT NULL CHECK (porte IN ('pequeno', 'medio', 'grande')),
   sexo        text        NOT NULL DEFAULT 'desconhecido'
                           CHECK (sexo IN ('macho', 'femea', 'desconhecido')),

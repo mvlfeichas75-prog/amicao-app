@@ -80,7 +80,7 @@ export default function NovoAnimalPage() {
       const { error: insertErro } = await supabase.from('animais').insert({
         nome: nome.trim() || null,
         descricao: descricao.trim() || null,
-        idade: idade.trim() || null,
+        idade_estimada: idade.trim() || null,
         porte,
         sexo,
         castrado,
