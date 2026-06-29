@@ -140,6 +140,7 @@ export default async function AnimaisPage(props: { searchParams: Promise<SearchP
                           src={fotoCard}
                           alt={animal.nome ?? 'Foto do animal'}
                           fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           className="object-cover"
                         />
                       ) : (

@@ -119,6 +119,7 @@ export default function GaleriaFotos({ fotos: fotosProp, nome, adotado, animalId
               src={fotos[ativa]}
               alt={`${nomeAlt} — foto ${ativa + 1}`}
               fill
+              sizes="(max-width: 896px) 100vw, 896px"
               className="object-cover"
               priority
             />
@@ -160,7 +161,7 @@ export default function GaleriaFotos({ fotos: fotosProp, nome, adotado, animalId
                 aria-label={`Ver foto ${i + 1}`}
                 aria-pressed={i === ativa}
               >
-                <Image src={url} alt={`${nomeAlt} — foto ${i + 1}`} fill className="object-cover" />
+                <Image src={url} alt={`${nomeAlt} — foto ${i + 1}`} fill sizes="80px" className="object-cover" />
                 {removendo === i && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                     <span className="text-white text-xs">…</span>
