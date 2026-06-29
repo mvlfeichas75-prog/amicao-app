@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { supabase } from '@/lib/supabase-js'
+import { supabase } from '@/lib/supabase'
 
 type Animal = {
   id: string
