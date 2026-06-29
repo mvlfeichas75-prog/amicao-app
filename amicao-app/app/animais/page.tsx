@@ -12,15 +12,15 @@ type Animal = {
   sexo: string
   castrado: boolean
   foto_url: string | null
-  created_at: string
+  criado_em: string
 }
 
 export default async function AnimaisPage() {
   const { data, error } = await supabase
     .from('animais')
-    .select('id, nome, cidade, estado, porte, sexo, castrado, foto_url, created_at')
+    .select('id, nome, cidade, estado, porte, sexo, castrado, foto_url, criado_em')
     .eq('status', 'disponivel')
-    .order('created_at', { ascending: false })
+    .order('criado_em', { ascending: false })
 
   if (error) console.error('Supabase error:', error.message)
 

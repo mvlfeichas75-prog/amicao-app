@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.animais (
   status      text        NOT NULL DEFAULT 'disponivel'
                           CHECK (status IN ('disponivel', 'adotado')),
   contato     text,
-  created_at  timestamptz NOT NULL DEFAULT now()
+  criado_em   timestamptz NOT NULL DEFAULT now()
 );
 
 -- RLS: habilita e permite leitura e escrita públicas (MVP sem autenticação)

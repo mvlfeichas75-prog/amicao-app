@@ -60,7 +60,7 @@ O script cria:
 | `foto_url` | text | JSON array de URLs (ex: `["url1","url2"]`) — até 5 fotos |
 | `status` | text | `disponivel` / `adotado` |
 | `contato` | text | número WhatsApp, opcional |
-| `created_at` | timestamptz | default `now()` |
+| `criado_em` | timestamptz | default `now()` |
 
 ## Storage
 
