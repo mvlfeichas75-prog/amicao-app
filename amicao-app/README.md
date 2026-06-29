@@ -62,6 +62,10 @@ O script cria:
 | `contato` | text | número WhatsApp, opcional |
 | `criado_em` | timestamptz | default `now()` |
 
+## Imagens externas
+
+O `next.config.ts` já autoriza o hostname do Supabase Storage via `images.remotePatterns`. Se trocar de projeto Supabase, atualize o `hostname` no arquivo.
+
 ## Storage
 
 Bucket `animais` (criado pelo `setup.sql`):

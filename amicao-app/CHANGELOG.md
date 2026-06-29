@@ -23,6 +23,7 @@
   - Estado vazio com emoji 🐾 e CTA para anunciar
 
 ### Fixed
+- `next.config.ts` — adiciona `images.remotePatterns` com o hostname `ejekfydbtszbaofjoflq.supabase.co` para permitir carregamento de imagens via `next/image`
 - `app/animais/novo/page.tsx` — campo renomeado de `idade` para `idade_estimada` no insert, alinhando com o schema da tabela
 - `lib/supabase.ts` — arquivo renomeado de `supabase-js` (sem extensão) para `supabase.ts`; imports corrigidos em todas as páginas
 
