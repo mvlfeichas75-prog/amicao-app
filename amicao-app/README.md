@@ -14,7 +14,7 @@ Plataforma para conectar cães abandonados a lares amorosos.
 |---|---|
 | `/` | Landing page com hero e como funciona |
 | `/animais` | Listagem de cães disponíveis para adoção |
-| `/animais/novo` | Formulário para anunciar um cão |
+| `/animais/novo` | Formulário para cadastrar e anunciar um cão |
 | `/animais/[id]` | Detalhes de um animal |
 | `/cadastro` | Cadastro de usuário |
 
@@ -38,9 +38,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<sua-chave-anon>
 | `porte` | text | pequeno / médio / grande |
 | `sexo` | text | macho / fêmea |
 | `castrado` | boolean | |
-| `foto_url` | text | URL pública |
+| `foto_url` | text | URL pública do Supabase Storage |
 | `status` | text | disponivel / adotado |
+| `vacinado` | boolean | |
+| `contato` | text | número WhatsApp (opcional) |
 | `created_at` | timestamptz | default now() |
+
+### Storage
+
+Crie um bucket público chamado `fotos` no Supabase Storage. As fotos são salvas no path `animais/{timestamp}.{ext}`.
 
 ## Rodando localmente
 
