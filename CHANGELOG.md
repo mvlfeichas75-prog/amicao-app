@@ -8,7 +8,11 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [Não publicado]
 
 ### Adicionado
+- Migration `20260629000002_alter_adocoes_interessado_anonimo.sql`: torna `adotante_id` nullable e adiciona `nome_interessado`, `email_interessado`, `telefone_interessado` à tabela `adocoes` para suporte a interesse sem login
 - Botão "Tenho interesse" na página do animal substitui o botão "Contato indisponível"; abre modal com formulário de nome, email, telefone (opcional) e motivo
+
+### Corrigido
+- `app/api/interesse/route.ts`: insert na tabela `adocoes` agora usa os nomes de coluna corretos (`nome_interessado`, `email_interessado`, `telefone_interessado`, `observacoes`) em vez dos nomes anteriores que não existiam na tabela
 - `app/animais/[id]/ModalInteresse.tsx`: componente client do formulário de interesse com tela de sucesso após envio
 - `app/api/interesse/route.ts`: salva interesse na tabela `adocoes` (status `interesse`) e envia email de notificação para o anunciante via Resend
 - Migration `20260629000001_create_adocoes.sql`: cria tabela `adocoes` com colunas `animal_id`, `nome`, `email`, `telefone`, `motivo`, `status` e `criado_em`

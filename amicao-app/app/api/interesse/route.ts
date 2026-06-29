@@ -26,15 +26,15 @@ export async function POST(req: NextRequest) {
 
   const { error: insertError } = await supabase.from('adocoes').insert({
     animal_id: animalId,
-    nome: nome.trim(),
-    email: email.trim(),
-    telefone: telefone?.trim() || null,
-    motivo: motivo.trim(),
+    nome_interessado: nome.trim(),
+    email_interessado: email.trim(),
+    telefone_interessado: telefone?.trim() || null,
+    observacoes: motivo.trim(),
     status: 'interesse',
   })
 
   if (insertError) {
-    console.error('[amicao] erro ao salvar interesse:', insertError)
+    console.error('[amicao] erro ao salvar interesse:', JSON.stringify(insertError, null, 2))
     return NextResponse.json({ error: 'Erro ao salvar. Tente novamente.' }, { status: 500 })
   }
 
