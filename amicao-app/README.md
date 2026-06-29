@@ -38,7 +38,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<sua-chave-anon>
 | `porte` | text | pequeno / médio / grande |
 | `sexo` | text | macho / fêmea |
 | `castrado` | boolean | |
-| `foto_url` | text | URL pública do Supabase Storage |
+| `foto_url` | text | JSON array de URLs públicas (ex: `["url1","url2"]`) |
 | `status` | text | disponivel / adotado |
 | `vacinado` | boolean | |
 | `contato` | text | número WhatsApp (opcional) |
@@ -46,7 +46,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<sua-chave-anon>
 
 ### Storage
 
-Crie um bucket público chamado `fotos` no Supabase Storage. As fotos são salvas no path `animais/{timestamp}.{ext}`.
+Crie um bucket público chamado `animais` no Supabase Storage. As fotos são salvas com path `{timestamp}-{random}.{ext}` e as URLs são armazenadas em `foto_url` como array JSON (suporta até 5 fotos por animal).
 
 ## Rodando localmente
 

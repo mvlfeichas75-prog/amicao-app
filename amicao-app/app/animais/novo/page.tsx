@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+
+const MAX_FOTOS = 5
 
 const ESTADOS_BR = [
   'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS',
@@ -13,6 +15,7 @@ const ESTADOS_BR = [
 
 export default function NovoAnimalPage() {
   const router = useRouter()
+  const inputFotoRef = useRef<HTMLInputElement>(null)
 
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
@@ -23,19 +26,27 @@ export default function NovoAnimalPage() {
   const [vacinado, setVacinado] = useState(false)
   const [cidade, setCidade] = useState('')
   const [estado, setEstado] = useState('SP')
-  const [foto, setFoto] = useState<File | null>(null)
-  const [fotoPreview, setFotoPreview] = useState<string | null>(null)
+  const [fotos, setFotos] = useState<File[]>([])
+  const [previews, setPreviews] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
   function handleFotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null
-    setFoto(file)
-    if (file) {
-      setFotoPreview(URL.createObjectURL(file))
-    } else {
-      setFotoPreview(null)
-    }
+    const novos = Array.from(e.target.files ?? [])
+    e.target.value = '' // permite selecionar o mesmo arquivo novamente
+
+    const vagas = MAX_FOTOS - fotos.length
+    if (vagas <= 0) return
+
+    const adicionados = novos.slice(0, vagas)
+    setFotos(prev => [...prev, ...adicionados])
+    setPreviews(prev => [...prev, ...adicionados.map(f => URL.createObjectURL(f))])
+  }
+
+  function handleRemover(index: number) {
+    URL.revokeObjectURL(previews[index])
+    setFotos(prev => prev.filter((_, i) => i !== index))
+    setPreviews(prev => prev.filter((_, i) => i !== index))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -50,20 +61,20 @@ export default function NovoAnimalPage() {
     setLoading(true)
 
     try {
-      let foto_url: string | null = null
+      const urls: string[] = []
 
-      if (foto) {
+      for (const foto of fotos) {
         const ext = foto.name.split('.').pop()
-        const path = `animais/${Date.now()}.${ext}`
+        const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
 
         const { data: upload, error: uploadErro } = await supabase.storage
-          .from('fotos')
+          .from('animais')
           .upload(path, foto, { upsert: false })
 
         if (uploadErro) throw new Error(`Upload falhou: ${uploadErro.message}`)
 
-        const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(upload.path)
-        foto_url = urlData.publicUrl
+        const { data: urlData } = supabase.storage.from('animais').getPublicUrl(upload.path)
+        urls.push(urlData.publicUrl)
       }
 
       const { error: insertErro } = await supabase.from('animais').insert({
@@ -76,7 +87,7 @@ export default function NovoAnimalPage() {
         vacinado,
         cidade: cidade.trim(),
         estado,
-        foto_url,
+        foto_url: urls.length > 0 ? JSON.stringify(urls) : null,
         status: 'disponivel',
       })
 
@@ -89,6 +100,8 @@ export default function NovoAnimalPage() {
       setLoading(false)
     }
   }
+
+  const podeMaisFortos = fotos.length < MAX_FOTOS
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-10">
@@ -104,28 +117,56 @@ export default function NovoAnimalPage() {
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-8 space-y-6">
 
-        {/* Foto */}
+        {/* Fotos */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Foto</label>
-          <div className="flex items-center gap-4">
-            <div className="w-24 h-24 rounded-xl bg-orange-50 flex items-center justify-center overflow-hidden shrink-0">
-              {fotoPreview ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={fotoPreview} alt="preview" className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-3xl">🐶</span>
-              )}
-            </div>
-            <div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFotoChange}
-                className="block text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 cursor-pointer"
-              />
-              <p className="text-xs text-gray-400 mt-1">JPG, PNG ou WEBP. Opcional.</p>
-            </div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-medium text-gray-700">
+              Fotos <span className="text-gray-400 font-normal">(opcional, máximo {MAX_FOTOS})</span>
+            </label>
+            {fotos.length > 0 && (
+              <span className="text-xs text-orange-600 font-medium">
+                {fotos.length}/{MAX_FOTOS}
+              </span>
+            )}
           </div>
+
+          <div className="flex flex-wrap gap-3">
+            {previews.map((src, i) => (
+              <div key={src} className="relative w-24 h-24 rounded-xl overflow-hidden shrink-0 group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={`foto ${i + 1}`} className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => handleRemover(i)}
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition"
+                  aria-label="Remover foto"
+                >
+                  <span className="text-white text-xl font-bold leading-none">×</span>
+                </button>
+              </div>
+            ))}
+
+            {podeMaisFortos && (
+              <button
+                type="button"
+                onClick={() => inputFotoRef.current?.click()}
+                className="w-24 h-24 rounded-xl border-2 border-dashed border-orange-200 bg-orange-50 flex flex-col items-center justify-center gap-1 text-orange-400 hover:border-orange-400 hover:text-orange-500 transition shrink-0"
+              >
+                <span className="text-2xl leading-none">+</span>
+                <span className="text-xs">Adicionar</span>
+              </button>
+            )}
+          </div>
+
+          <input
+            ref={inputFotoRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFotoChange}
+            className="hidden"
+          />
+          <p className="text-xs text-gray-400 mt-2">JPG, PNG ou WEBP. Clique em uma foto para removê-la.</p>
         </div>
 
         <hr className="border-gray-100" />

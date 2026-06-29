@@ -4,10 +4,10 @@
 
 ### Added
 - `app/animais/novo/page.tsx` — formulário de cadastro de novo animal (Client Component)
-  - Campos: nome (opcional), descrição, idade estimada, porte, sexo, castrado, vacinado, cidade, estado, foto
-  - Upload de foto para Supabase Storage (bucket `fotos`)
+  - Campos: nome (opcional), descrição, idade estimada, porte, sexo, castrado, vacinado, cidade, estado, fotos
+  - Upload de 1 a 5 fotos para Supabase Storage (bucket `animais`); URLs salvas como array JSON em `foto_url`
+  - Grid de previews com botão de remoção individual por hover; botão `+` aparece enquanto há vagas
   - Insert na tabela `animais` com `status: 'disponivel'`
-  - Preview de foto local antes do envio
   - Feedback de loading e erros; redireciona para `/animais` ao salvar
 - `app/animais/[id]/page.tsx` — página de detalhes do animal
   - Foto em destaque com badge "Adotado" quando aplicável
