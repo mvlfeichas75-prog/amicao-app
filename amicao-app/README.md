@@ -49,6 +49,13 @@ RESEND_API_KEY=re_<sua-chave-resend>
 
 A chave do Resend é obtida em [resend.com](https://resend.com) após criar uma conta. O envio de emails usa `onboarding@resend.dev` em desenvolvimento (sem verificação de domínio necessária).
 
+### Fluxo de gerenciamento de anúncios
+
+1. Ao cadastrar, o anunciante informa seu email → sistema gera código de 6 dígitos → salva no banco → envia por email via Resend
+2. Na página do animal, botão **Gerenciar anúncio** abre modal que pede o código
+3. Código correto → opções de alterar status, gerenciar fotos e remover anúncio
+4. Código perdido → link **Não tenho o código** → campo de email → **Reenviar código** → sistema revalida o email e reenviar se corresponder ao cadastro
+
 ### 2. Banco de dados e Storage
 
 Execute o arquivo `supabase/setup.sql` no **SQL Editor** do seu projeto Supabase:

@@ -4,6 +4,11 @@
 
 ### Added
 
+#### Reenvio de código no modal de gerenciamento
+- Link "Não tenho o código" abaixo do botão Confirmar no modal — ao clicar, exibe campo de email e botão "Reenviar código"
+- API route `POST /api/reenviar-codigo` — verifica se o email informado corresponde ao `email_anunciante` do anúncio e, se sim, reenviaо código; sempre retorna `{ ok: true }` para evitar enumeração de emails
+- Feedback de sucesso exibe mensagem genérica ("Se o email for o cadastrado, o código será reenviado") sem confirmar se o email existe
+
 #### Sistema de código de gerenciamento
 - Campo **email obrigatório** no formulário `/animais/novo` (seção "Contato do resgatador") — anunciante informa seu email para receber o código
 - Ao cadastrar, gera um **código único de 6 dígitos** e salva nas colunas `email_anunciante` e `codigo_gerenciamento` da tabela `animais`

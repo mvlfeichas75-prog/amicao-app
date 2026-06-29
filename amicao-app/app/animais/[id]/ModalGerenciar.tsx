@@ -19,12 +19,19 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
   const [status, setStatus] = useState(statusAtual)
   const [salvandoStatus, setSalvandoStatus] = useState(false)
   const [removendo, setRemovendo] = useState(false)
+  const [mostrarReenvio, setMostrarReenvio] = useState(false)
+  const [emailReenvio, setEmailReenvio] = useState('')
+  const [reenviando, setReenviando] = useState(false)
+  const [reenvioOk, setReenvioOk] = useState(false)
 
   function abrir() {
     setAberto(true)
     setCodigo('')
     setAutorizado(false)
     setErroVerificacao(null)
+    setMostrarReenvio(false)
+    setEmailReenvio('')
+    setReenvioOk(false)
   }
 
   async function verificarCodigo(e: React.FormEvent) {
@@ -63,6 +70,23 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
       router.refresh()
     }
     setSalvandoStatus(false)
+  }
+
+  async function reenviarCodigo(e: React.FormEvent) {
+    e.preventDefault()
+    setReenviando(true)
+    try {
+      await fetch('/api/reenviar-codigo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ animalId, email: emailReenvio }),
+      })
+      setReenvioOk(true)
+    } catch {
+      setReenvioOk(true) // mesmo em erro, não revelamos se o email existe
+    } finally {
+      setReenviando(false)
+    }
   }
 
   async function removerAnuncio() {
@@ -131,6 +155,43 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
                 >
                   {verificando ? 'Verificando…' : 'Confirmar'}
                 </button>
+
+                <div className="text-center">
+                  <button
+                    type="button"
+                    onClick={() => { setMostrarReenvio(v => !v); setReenvioOk(false) }}
+                    className="text-xs text-gray-400 hover:text-orange-500 underline transition"
+                  >
+                    Não tenho o código
+                  </button>
+                </div>
+
+                {mostrarReenvio && (
+                  reenvioOk ? (
+                    <p className="text-sm text-green-600 bg-green-50 rounded-xl px-4 py-3 text-center">
+                      Se o email for o cadastrado, o código será reenviado em breve.
+                    </p>
+                  ) : (
+                    <form onSubmit={reenviarCodigo} className="space-y-2 border-t border-gray-100 pt-4">
+                      <p className="text-xs text-gray-500">Informe o email usado ao cadastrar o anúncio:</p>
+                      <input
+                        type="email"
+                        value={emailReenvio}
+                        onChange={e => setEmailReenvio(e.target.value)}
+                        placeholder="voce@email.com"
+                        required
+                        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!emailReenvio.trim() || reenviando}
+                        className="w-full bg-gray-100 text-gray-700 font-medium py-2.5 rounded-full hover:bg-orange-50 hover:text-orange-600 transition disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+                      >
+                        {reenviando ? 'Enviando…' : 'Reenviar código'}
+                      </button>
+                    </form>
+                  )
+                )}
               </form>
             ) : (
               <div className="space-y-4">
