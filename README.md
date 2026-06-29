@@ -34,6 +34,7 @@ npm run dev
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Chave anon do Supabase |
 | `RESEND_API_KEY` | Chave de API do [Resend](https://resend.com) (envio de e-mails) |
+| `ADMIN_PASSWORD` | Senha de acesso ao painel `/admin` |
 
 ## Banco de dados (Supabase)
 
@@ -50,6 +51,7 @@ Execute os arquivos em `supabase/migrations/` **em ordem cronológica** (prefixo
 | `20260629000000_add_missing_columns_animais.sql` | Adiciona colunas de comportamento, saúde, histórico e gerenciamento à tabela `animais` |
 | `20260629000001_create_adocoes.sql` | Cria tabela `adocoes` para registrar interesses de adoção |
 | `20260629000002_alter_adocoes_interessado_anonimo.sql` | Torna `adotante_id` nullable e adiciona `nome_interessado`, `email_interessado`, `telefone_interessado` |
+| `20260629000003_create_configuracoes.sql` | Cria tabela `configuracoes` para feature flags; expande `status` de animais com `em_triagem` e `sumiu` |
 
 ## Tabela `animais` — colunas principais
 

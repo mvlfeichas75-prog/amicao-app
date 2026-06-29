@@ -8,6 +8,13 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 ## [Não publicado]
 
 ### Adicionado
+- Painel admin em `/admin` com autenticação por senha (`ADMIN_PASSWORD`), sessão em localStorage e 4 seções:
+  - **Dashboard**: cards com métricas (total animais, disponíveis, adotados, usuários, interesses)
+  - **Gestão de animais**: tabela com foto miniatura, localização, status inline editável e remoção
+  - **Gestão de interesses**: tabela de registros da tabela `adocoes` com dados do interessado
+  - **Feature Flags**: toggles para ativar/desativar módulos, persistidos na tabela `configuracoes`
+- `app/api/admin/login/route.ts`: verifica senha contra `ADMIN_PASSWORD` (server-side)
+- Migration `20260629000003_create_configuracoes.sql`: cria tabela `configuracoes` e expande `status` de animais com `em_triagem` e `sumiu`
 - Migration `20260629000002_alter_adocoes_interessado_anonimo.sql`: torna `adotante_id` nullable e adiciona `nome_interessado`, `email_interessado`, `telefone_interessado` à tabela `adocoes` para suporte a interesse sem login
 - Botão "Tenho interesse" na página do animal substitui o botão "Contato indisponível"; abre modal com formulário de nome, email, telefone (opcional) e motivo
 
