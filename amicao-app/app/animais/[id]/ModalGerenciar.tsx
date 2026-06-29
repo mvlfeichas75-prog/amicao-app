@@ -23,6 +23,7 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
   const [emailReenvio, setEmailReenvio] = useState('')
   const [reenviando, setReenviando] = useState(false)
   const [reenvioOk, setReenvioOk] = useState(false)
+  const [erroReenvio, setErroReenvio] = useState<string | null>(null)
 
   function abrir() {
     setAberto(true)
@@ -32,6 +33,7 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
     setMostrarReenvio(false)
     setEmailReenvio('')
     setReenvioOk(false)
+    setErroReenvio(null)
   }
 
   async function verificarCodigo(e: React.FormEvent) {
@@ -75,15 +77,23 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
   async function reenviarCodigo(e: React.FormEvent) {
     e.preventDefault()
     setReenviando(true)
+    setErroReenvio(null)
     try {
-      await fetch('/api/reenviar-codigo', {
+      const res = await fetch('/api/reenviar-codigo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ animalId, email: emailReenvio }),
       })
-      setReenvioOk(true)
+      const json = await res.json()
+      if (json.ok) {
+        setReenvioOk(true)
+      } else if (json.motivo === 'email_nao_encontrado') {
+        setErroReenvio('Email não encontrado para este anúncio.')
+      } else {
+        setErroReenvio('Erro ao reenviar o código. Tente novamente.')
+      }
     } catch {
-      setReenvioOk(true) // mesmo em erro, não revelamos se o email existe
+      setErroReenvio('Erro de conexão. Tente novamente.')
     } finally {
       setReenviando(false)
     }
@@ -159,7 +169,7 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
                 <div className="text-center">
                   <button
                     type="button"
-                    onClick={() => { setMostrarReenvio(v => !v); setReenvioOk(false) }}
+                    onClick={() => { setMostrarReenvio(v => !v); setReenvioOk(false); setErroReenvio(null) }}
                     className="text-xs text-gray-400 hover:text-orange-500 underline transition"
                   >
                     Não tenho o código
@@ -169,10 +179,9 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
                 {mostrarReenvio && (
                   reenvioOk ? (
                     <div className="border border-green-200 bg-green-50 rounded-xl px-4 py-4 text-center space-y-1">
-                      <p className="text-green-700 font-semibold text-sm">Email enviado!</p>
+                      <p className="text-green-700 font-semibold text-sm">Código enviado para seu email!</p>
                       <p className="text-green-600 text-xs">
-                        Se o email informado estiver cadastrado, você receberá um novo código em instantes.
-                        Verifique também a caixa de spam.
+                        Verifique sua caixa de entrada e a pasta de spam.
                       </p>
                     </div>
                   ) : (
@@ -181,11 +190,14 @@ export default function ModalGerenciar({ animalId, statusAtual }: Props) {
                       <input
                         type="email"
                         value={emailReenvio}
-                        onChange={e => setEmailReenvio(e.target.value)}
+                        onChange={e => { setEmailReenvio(e.target.value); setErroReenvio(null) }}
                         placeholder="voce@email.com"
                         required
                         className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-400"
                       />
+                      {erroReenvio && (
+                        <p className="text-sm text-red-500">{erroReenvio}</p>
+                      )}
                       <button
                         type="submit"
                         disabled={!emailReenvio.trim() || reenviando}
