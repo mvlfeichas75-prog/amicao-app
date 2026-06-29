@@ -13,10 +13,27 @@ Plataforma para conectar cães abandonados a lares amorosos.
 | Rota | Descrição |
 |---|---|
 | `/` | Landing page com hero e como funciona |
-| `/animais` | Listagem de cães disponíveis para adoção |
+| `/animais` | Listagem com filtros e paginação |
 | `/animais/novo` | Formulário para cadastrar e anunciar um cão |
 | `/animais/[id]` | Detalhes de um animal |
 | `/cadastro` | Cadastro de usuário |
+
+## Filtros e paginação
+
+A listagem `/animais` suporta os seguintes filtros via query string (todos opcionais, combináveis):
+
+| Parâmetro | Valores | Exemplo |
+|---|---|---|
+| `estado` | sigla (SP, RJ…) | `?estado=SP` |
+| `cidade` | texto parcial (ilike) | `?cidade=campinas` |
+| `porte` | `pequeno` / `medio` / `grande` | `?porte=medio` |
+| `sexo` | `macho` / `femea` | `?sexo=femea` |
+| `castrado` | `sim` / `nao` | `?castrado=sim` |
+| `convive_criancas` | `sim` / `nao` / `nao_testado` | `?convive_criancas=sim` |
+| `convive_caes` | `sim` / `nao` / `nao_testado` | `?convive_caes=sim` |
+| `pagina` | número (padrão 1) | `?pagina=2` |
+
+URLs com filtros podem ser compartilhadas — o estado da busca está inteiramente na URL. A paginação mostra 12 animais por página.
 
 ## Configuração
 

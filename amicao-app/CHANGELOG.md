@@ -26,9 +26,13 @@
 - `next.config.ts` — `images.remotePatterns` com hostname do Supabase Storage
 
 #### Listagem `/animais`
+- Barra de filtros (`FiltrosBarra.tsx`) com 7 campos: estado (select com 27 estados), cidade (texto parcial), porte, sexo, castrado, convive com crianças e convive com cães; selects auto-submetem ao mudar, cidade submete via Enter ou botão OK; botão "Limpar" aparece quando há filtro ativo
+- Paginação com 12 animais por página: botões Anterior/Próxima como `<Link>` gerados no servidor, indicador "Página X de Y"
+- Todos os filtros e a página atual vivem na URL (query string) — permite compartilhar e bookmarkar buscas
+- Contador de resultados com sufixo "com esses filtros" quando há filtro ativo
+- Estado vazio diferenciado: 🔍 quando nenhum resultado casa com filtros; 🐾 quando não há animais cadastrados
 - Exibe a primeira foto do array JSON em cada card
 - Grid responsivo (1/2/3 colunas) com foto, nome, cidade, estado, porte, sexo e badge de castrado
-- Estado vazio com emoji 🐾 e CTA para anunciar
 
 ### Fixed
 - Animal não aparecia na listagem após cadastro — adicionado `router.refresh()` antes de `router.push('/animais')` para invalidar o cache client-side do Next.js App Router
