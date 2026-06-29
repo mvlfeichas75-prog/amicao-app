@@ -2,16 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-
-function parseFotos(foto_url: string | null): string[] {
-  if (!foto_url) return []
-  try {
-    const parsed = JSON.parse(foto_url)
-    return Array.isArray(parsed) ? parsed : [foto_url]
-  } catch {
-    return [foto_url] // compatibilidade com registros antigos (URL simples)
-  }
-}
+import { parseFotos } from '@/lib/fotos'
 
 export default async function AnimalPage(props: PageProps<'/animais/[id]'>) {
   const { id } = await props.params

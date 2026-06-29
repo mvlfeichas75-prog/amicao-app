@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
+import { parseFotos } from '@/lib/fotos'
 
 type Animal = {
   id: string
@@ -64,10 +65,10 @@ export default async function AnimaisPage() {
             <Link key={animal.id} href={`/animais/${animal.id}`}>
               <div className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition">
                 <div className="relative h-52 bg-orange-50">
-                  {animal.foto_url ? (
+                  {parseFotos(animal.foto_url)[0] ? (
                     <Image
-                      src={animal.foto_url}
-                      alt={animal.nome}
+                      src={parseFotos(animal.foto_url)[0]}
+                      alt={animal.nome ?? 'Foto do animal'}
                       fill
                       className="object-cover"
                     />
